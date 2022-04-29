@@ -29,8 +29,6 @@ public class AsyncApplication {
         SpringApplication.run(AsyncApplication.class, args);
     }
 
-
-
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
     public @interface TimeMethod {
