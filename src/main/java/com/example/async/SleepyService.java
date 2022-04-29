@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 @Service
 @Slf4j
 public class SleepyService {
@@ -28,7 +30,8 @@ public class SleepyService {
 
     @SneakyThrows
     public String sleepAndReturnFeedback() {
-        Thread.sleep(1000);
-        return "Slept for 1000ms";
+        int millis = new Random().nextInt(500) + 1000;
+        Thread.sleep(millis);
+        return String.format("Slept for %dms", millis);
     }
 }

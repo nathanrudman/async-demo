@@ -5,13 +5,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.ParallelFlux;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -110,12 +112,12 @@ public class SleepyController {
     }
 
     @SneakyThrows
-    @GetMapping(value = "/log6")
+    @GetMapping(value = "/log6", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @Operation(summary = "Parallel - Using Spring reactive project (Flux/Monos) - Returns parallel flux. Results are streamed")
-    public @ResponseBody ParallelFlux<String> usingSpringReactiveProjectReturningFlux() {
-        return Flux.range(0, 500)
-                .parallel()
-                .runOn(Schedulers.parallel())
-                .map(unused -> sleepyService.sleepAndReturnFeedback());
+    public @ResponseBody Flux<List<String>> usingSpringReactiveProjectReturningFlux() {
+        return Flux.range(0, 10000)
+                .flatMap(integer -> Mono.fromSupplier(() -> sleepyService.sleepAndReturnFeedback())
+                        .subscribeOn(Schedulers.boundedElastic()))
+                .buffer(Duration.ofMillis(50), Duration.ofMillis(50), Schedulers.parallel());
     }
 }
