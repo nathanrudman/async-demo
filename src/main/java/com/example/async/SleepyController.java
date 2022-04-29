@@ -113,7 +113,7 @@ public class SleepyController {
     @GetMapping(value = "/log6")
     @Operation(summary = "Parallel - Using Spring reactive project (Flux/Monos) - Returns parallel flux. Results are streamed")
     public @ResponseBody ParallelFlux<String> usingSpringReactiveProjectReturningFlux() {
-        return Flux.range(0, 100)
+        return Flux.range(0, 500)
                 .parallel()
                 .runOn(Schedulers.parallel())
                 .map(unused -> sleepyService.sleepAndReturnFeedback());
