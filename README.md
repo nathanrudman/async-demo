@@ -3,7 +3,8 @@ Async Demo - Spring Boot/Java
 
 Simple examples to turn a sequential (blocking) calls to run asynchronously multithreaded
 
-    Spring Boot, Swagger, Swagger-UI, Spring Reactive
+    Using: Spring Boot, Swagger, Swagger-UI, Spring Reactive
+    Showing: Java parallel streams, completable futures, spring-reactive (flux/mono) 
 
 **Default Port**:8080
 
