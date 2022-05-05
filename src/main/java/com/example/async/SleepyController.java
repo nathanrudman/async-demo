@@ -84,7 +84,7 @@ public class SleepyController {
     @GetMapping(value = "/log4")
     @TimeMethod
     @Operation(summary = "Parallel - Using Java 8 CompletableFuture - String return")
-    public @ResponseBody CompletableFuture<String> usingCompletableFutureWithReturn(@RequestParam(required = false, defaultValue = "5") int executions) {
+    public @ResponseBody String usingCompletableFutureWithReturn(@RequestParam(required = false, defaultValue = "5") int executions) {
         List<CompletableFuture<String>> futures = IntStream.range(0, executions)
                 .boxed()
                 .map(unused -> CompletableFuture.supplyAsync(() -> sleepyService.sleepAndReturnFeedback()))
@@ -93,7 +93,8 @@ public class SleepyController {
         return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
                 .thenApply(unused -> futures
                         .stream().map(CompletableFuture::join)
-                        .collect(Collectors.joining(", ")));
+                        .collect(Collectors.joining(", ")))
+                .join();
     }
 
 
